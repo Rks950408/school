@@ -28,7 +28,7 @@ const Layout = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex">
       {/* Mobile sidebar backdrop */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
@@ -37,7 +37,7 @@ const Layout = () => {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl border-r border-gray-200 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:inset-0`}>
+      <div className={`fixed inset-y-0 left-0 z-30 w-64 bg-white shadow-xl border-r border-gray-200 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:static lg:flex-shrink-0`}>
         <div className="flex items-center justify-between h-16 px-4 bg-gradient-to-r from-primary-600 to-primary-700 shadow-md">
           <div className="flex items-center space-x-2">
             <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
@@ -85,9 +85,9 @@ const Layout = () => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64 flex flex-col min-h-screen">
+      <div className="flex-1 flex flex-col min-h-screen lg:pl-0">
         {/* Top navigation */}
-        <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white shadow-sm border-b border-gray-200">
+        <div className="sticky top-0 z-40 flex-shrink-0 flex h-16 bg-white shadow-sm border-b border-gray-200">
           <button
             type="button"
             className="px-4 border-r border-gray-200 text-gray-500 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500 lg:hidden transition-colors duration-200"
