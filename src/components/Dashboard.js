@@ -46,22 +46,27 @@ const Dashboard = () => {
   };
 
   const StatCard = ({ title, value, icon, color, description }) => (
-    <div className="bg-white overflow-hidden shadow rounded-lg">
-      <div className="p-5">
-        <div className="flex items-center">
-          <div className="flex-shrink-0">
-            <div className={`text-2xl ${color}`}>{icon}</div>
-          </div>
-          <div className="ml-5 w-0 flex-1">
-            <dl>
-              <dt className="text-sm font-medium text-gray-500 truncate">{title}</dt>
-              <dd className="text-lg font-medium text-gray-900">{value}</dd>
-            </dl>
+    <div className="bg-white overflow-hidden shadow-lg rounded-xl border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+      <div className="p-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className={`p-3 rounded-xl ${color.replace('text-', 'bg-').replace('-600', '-100')}`}>
+              <span className={`text-2xl ${color}`}>{icon}</span>
+            </div>
+            <div>
+              <p className="text-sm font-medium text-gray-600 uppercase tracking-wide">{title}</p>
+              <p className="text-2xl font-bold text-gray-900 mt-1">{value}</p>
+            </div>
           </div>
         </div>
         {description && (
-          <div className="mt-3">
-            <p className="text-sm text-gray-600">{description}</p>
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <p className="text-sm text-gray-500 flex items-center">
+              <svg className="w-4 h-4 mr-1 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {description}
+            </p>
           </div>
         )}
       </div>
@@ -87,19 +92,35 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Welcome section */}
-      <div className="bg-white shadow rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-gray-900">
-          Welcome back, {user?.name || user?.email}!
-        </h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Here's what's happening at your school today.
-        </p>
+      <div className="bg-gradient-to-r from-primary-500 to-primary-600 shadow-xl rounded-2xl p-8 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">
+              Welcome back, {user?.name || user?.email?.split('@')[0]}! 👋
+            </h1>
+            <p className="mt-2 text-primary-100 text-lg">
+              Here's what's happening at your school today.
+            </p>
+            <div className="mt-4 flex items-center space-x-4 text-sm text-primary-100">
+              <span>📅 {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span>•</span>
+              <span className="capitalize">🔰 {user?.role} Dashboard</span>
+            </div>
+          </div>
+          <div className="hidden md:block">
+            <div className="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center">
+              <span className="text-4xl">
+                {user?.role === 'admin' ? '👨‍💼' : user?.role === 'teacher' ? '👨‍🏫' : '👨‍🎓'}
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Stats grid */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <StatCard
           title="Total Students"
           value={stats.totalStudents}
@@ -144,34 +165,71 @@ const Dashboard = () => {
         />
       </div>
 
-      {/* Recent activities */}
-      <div className="bg-white shadow rounded-lg">
-        <div className="px-4 py-5 sm:p-6">
-          <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-            Recent Activities
+      {/* Quick Actions */}
+      {user?.role === 'admin' && (
+        <div className="bg-white shadow-lg rounded-xl border border-gray-100 p-6">
+          <h3 className="text-xl font-bold text-gray-900 mb-4 flex items-center">
+            <span className="mr-2">🚀</span>
+            Quick Actions
           </h3>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50 transition-all duration-200">
+              <span className="text-2xl mb-2">👨‍🎓</span>
+              <span className="text-sm font-medium text-gray-700">Add Student</span>
+            </button>
+            <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50 transition-all duration-200">
+              <span className="text-2xl mb-2">👨‍🏫</span>
+              <span className="text-sm font-medium text-gray-700">Add Teacher</span>
+            </button>
+            <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50 transition-all duration-200">
+              <span className="text-2xl mb-2">📝</span>
+              <span className="text-sm font-medium text-gray-700">Schedule Exam</span>
+            </button>
+            <button className="flex flex-col items-center p-4 rounded-lg border-2 border-dashed border-gray-300 hover:border-primary-400 hover:bg-primary-50 transition-all duration-200">
+              <span className="text-2xl mb-2">💰</span>
+              <span className="text-sm font-medium text-gray-700">Send Reminders</span>
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Recent activities */}
+      <div className="bg-white shadow-lg rounded-xl border border-gray-100">
+        <div className="px-6 py-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-xl font-bold text-gray-900 flex items-center">
+              <span className="mr-2">⚡</span>
+              Recent Activities
+            </h3>
+            <button className="text-primary-600 hover:text-primary-700 text-sm font-medium">
+              View All
+            </button>
+          </div>
           <div className="flow-root">
-            <ul className="-mb-8">
+            <ul className="space-y-4">
               {recentActivities.map((activity, index) => (
                 <li key={activity.id}>
-                  <div className="relative pb-8">
-                    {index !== recentActivities.length - 1 && (
-                      <span className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200" />
-                    )}
-                    <div className="relative flex space-x-3">
-                      <div>
-                        <span className="h-8 w-8 rounded-full bg-gray-100 flex items-center justify-center">
-                          {getActivityIcon(activity.type)}
-                        </span>
+                  <div className="flex items-start space-x-4 p-4 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                    <div className="flex-shrink-0">
+                      <div className="h-10 w-10 rounded-full bg-gradient-to-r from-primary-100 to-primary-200 flex items-center justify-center">
+                        <span className="text-lg">{getActivityIcon(activity.type)}</span>
                       </div>
-                      <div className="min-w-0 flex-1 pt-1.5 flex justify-between space-x-4">
-                        <div>
-                          <p className="text-sm text-gray-900">{activity.message}</p>
-                        </div>
-                        <div className="text-right text-sm whitespace-nowrap text-gray-500">
-                          {activity.time}
-                        </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900">
+                        {activity.message}
+                      </p>
+                      <div className="flex items-center mt-1 text-xs text-gray-500">
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        {activity.time}
                       </div>
+                    </div>
+                    <div className="flex-shrink-0">
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                        New
+                      </span>
                     </div>
                   </div>
                 </li>
